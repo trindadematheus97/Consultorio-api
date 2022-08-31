@@ -1,7 +1,10 @@
 ﻿using Consultorio.Context;
 using Consultorio.Models.Entities;
 using Consultorio.Repository.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Consultorio.Repository
 {
@@ -23,14 +26,15 @@ namespace Consultorio.Repository
             throw new System.NotImplementedException();
         }
 
-        public IEnumerable<Paciente> Get()
+        public async Task<IEnumerable<Paciente>> GetPacientesAsync()
         {
-            throw new System.NotImplementedException();
+            return await _context.Pacientes.Include(x => x.Consultas).ToListAsync();
+           
         }
 
-        public Paciente GetById(int id)
+        public async Task<Paciente> GetPacientesByIdAsync(int id)
         {
-            throw new System.NotImplementedException();
+            return await _context.Pacientes.Include(x => x.Consultas).Where(x => x.Id ==id).FirstOrDefaultAsync();
         }
 
         public bool SaveChanges()

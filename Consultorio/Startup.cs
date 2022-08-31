@@ -1,4 +1,6 @@
 using Consultorio.Context;
+using Consultorio.Repository;
+using Consultorio.Repository.Interfaces;
 using Consultorio.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -29,8 +31,12 @@ namespace Consultorio
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers();
-
+            services.AddControllers().AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            });
+            services.AddScoped<IBaseRepository, BaseRepository>();
+            services.AddScoped<IPacienteRepository, PacienteRepository>();
             services.AddDbContext<ConsultorioContext>(options =>
             {
             options.UseSqlServer(Configuration.GetConnectionString("Default"),
