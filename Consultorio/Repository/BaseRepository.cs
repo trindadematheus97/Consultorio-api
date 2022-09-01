@@ -1,5 +1,7 @@
 ﻿using Consultorio.Context;
+using Consultorio.Models.Entities;
 using Consultorio.Repository.Interfaces;
+using System.Threading.Tasks;
 
 namespace Consultorio.Repository
 {
@@ -22,6 +24,11 @@ namespace Consultorio.Repository
         }
 
         public bool SaveChanges()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<bool> SaveChangesAsync()
         {
             throw new System.NotImplementedException();
         }

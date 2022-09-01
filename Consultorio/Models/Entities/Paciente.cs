@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Consultorio.Models.Dtos;
+using System.Collections.Generic;
 
 namespace Consultorio.Models.Entities
 {
@@ -9,5 +10,19 @@ namespace Consultorio.Models.Entities
         public string Celular { get; set; }
         public string Cpf { get; set; }
         public List<Consulta> Consultas { get; set; }
+
+        public static class FactoryPaciente
+        {
+            public static Paciente Registrar(PacienteAdicionarDto p)
+            {
+                return new Paciente()
+                {
+                    Nome = p.Nome,
+                    Email = p.Email,
+                    Celular = p.Celular,
+                    Cpf = p.Cpf
+                };
+            }
+        }
     }
 }

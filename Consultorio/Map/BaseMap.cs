@@ -10,11 +10,12 @@ namespace Consultorio.Map
         public BaseMap(string tablename)
         {
             _tableName = tablename;
-        } public virtual void Configure(EntityTypeBuilder<T> builder)
+        } 
+        
+        public virtual void Configure(EntityTypeBuilder<T> builder)
         {
-           builder.HasKey(x => x.Id);
-           builder.Property(x => x.Id).HasColumnName("id").ValueGeneratedOnAdd();
-        }
-       
+            builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).HasColumnName("id").ValueGeneratedOnAdd();
+        }      
     }
 }

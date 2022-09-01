@@ -1,4 +1,6 @@
-﻿using Consultorio.Models.Entities;
+﻿using AutoMapper;
+using Consultorio.Models.Dtos;
+using Consultorio.Models.Entities;
 using Consultorio.Repository.Interfaces;
 using Consultorio.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -11,35 +13,59 @@ namespace Consultorio.Controllers
 {
     [ApiController]
     [Route("api/controller")]
-    public class PacienteController :ControllerBase
+    public class PacienteController : ControllerBase
     {
         private readonly IPacienteRepository _repository;
+        private readonly IMapper _mapper;
 
-        public PacienteController(IPacienteRepository repository)
+        public PacienteController(IPacienteRepository repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
+
             var pacientes = await _repository.GetPacientesAsync();
 
-            if (pacientes == null)
-                NotFound("Pacientes não encontrados.");
+            if (pacientes != null)
 
-            return Ok(pacientes);
+                return Ok(pacientes);
+
+            return NotFound("Pacientes não encontrados.");
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var paciente = await _repository.GetPacientesById(id);
+            var paciente = await _repository.GetPacientesByIdAsync(id);
 
-            if (paciente == null)
-                NotFound("Paciente não encontrado.");
+            var pacienteRetorno = _mapper.Map<PacienteDetailsDto>(paciente);
 
-            return Ok(paciente);
+            var pacienteTest = _mapper.Map<Paciente>(pacienteRetorno);
+
+            if (pacienteRetorno == null)
+                return NotFound("Paciente não encontrado.");
+
+            return Ok(pacienteRetorno);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post(PacienteAdicionarDto paciente)
+        {
+            if (paciente == null) return BadRequest("Dados inválidos");
+
+            //var pacienteAdicionar = _mapper.Map<Paciente>(paciente);
+
+            var pacienteAdicionar = Paciente.FactoryPaciente.Registrar(paciente);
+
+            _repository.Add(pacienteAdicionar);
+
+            return await _repository.SaveChangesAsync()
+                ? Ok("Paciente adicionado com sucesso.")
+                : BadRequest("Erro ao salvar o paciente!");
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using Consultorio.Context;
+using Consultorio.Models.Dtos;
 using Consultorio.Models.Entities;
 using Consultorio.Repository.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +20,7 @@ namespace Consultorio.Repository
         }
         public void Add<T>(T entity) where T : class
         {
-            throw new System.NotImplementedException();
+            _context.Add(entity);
         }
 
         public void Delete<T>(T entity) where T : class
@@ -26,25 +28,37 @@ namespace Consultorio.Repository
             throw new System.NotImplementedException();
         }
 
-        public async Task<IEnumerable<Paciente>> GetPacientesAsync()
+        public async Task<IEnumerable<PacienteDto>> GetPacientesAsync()
         {
-            return await _context.Pacientes.Include(x => x.Consultas).ToListAsync();
+            return await _context.Pacientes
+                .Select(x => new PacienteDto { Id = x.Id, Nome = x.Nome})
+                .ToListAsync();
            
+        }
+
+        public Task<Paciente> GetPacientesById(int id)
+        {
+            throw new System.NotImplementedException();
         }
 
         public async Task<Paciente> GetPacientesByIdAsync(int id)
         {
-            return await _context.Pacientes.Include(x => x.Consultas).Where(x => x.Id ==id).FirstOrDefaultAsync();
+            return await _context.Pacientes.Include(x => x.Consultas)
+                .ThenInclude(c => c.Especialidade)
+                .ThenInclude(c => c.Profissionais)
+                .Where(x => x.Id == id).FirstOrDefaultAsync();
         }
 
-        public bool SaveChanges()
+        public async Task<bool> SaveChangesAsync()
         {
-            throw new System.NotImplementedException();
+            return await _context.SaveChangesAsync() > 0;
         }
 
         public void Update<T>(T entity) where T : class
         {
             throw new System.NotImplementedException();
         }
+
+        
     }
 }

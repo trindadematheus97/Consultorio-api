@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Consultorio.Migrations
 {
     [DbContext(typeof(ConsultorioContext))]
-    [Migration("20220831013130_CriandoDb")]
-    partial class CriandoDb
+    [Migration("20220831220159_One")]
+    partial class One
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
