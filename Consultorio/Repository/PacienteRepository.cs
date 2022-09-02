@@ -18,15 +18,7 @@ namespace Consultorio.Repository
         {
             _context = context;
         }
-        public void Add<T>(T entity) where T : class
-        {
-            _context.Add(entity);
-        }
-
-        public void Delete<T>(T entity) where T : class
-        {
-            throw new System.NotImplementedException();
-        }
+       
 
         public async Task<IEnumerable<PacienteDto>> GetPacientesAsync()
         {
@@ -36,10 +28,7 @@ namespace Consultorio.Repository
            
         }
 
-        public Task<Paciente> GetPacientesById(int id)
-        {
-            throw new System.NotImplementedException();
-        }
+      
 
         public async Task<Paciente> GetPacientesByIdAsync(int id)
         {
@@ -49,16 +38,8 @@ namespace Consultorio.Repository
                 .Where(x => x.Id == id).FirstOrDefaultAsync();
         }
 
-        public async Task<bool> SaveChangesAsync()
-        {
-            return await _context.SaveChangesAsync() > 0;
-        }
+       
 
-        public void Update<T>(T entity) where T : class
-        {
-            throw new System.NotImplementedException();
-        }
 
-        
     }
 }

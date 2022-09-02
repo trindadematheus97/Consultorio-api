@@ -38,6 +38,7 @@ namespace Consultorio
             services.AddAutoMapper(typeof(Startup));
             services.AddScoped<IBaseRepository, BaseRepository>();
             services.AddScoped<IPacienteRepository, PacienteRepository>();
+            services.AddScoped<IProfissionalRepository,ProfissionalRepository>();
             services.AddDbContext<ConsultorioContext>(options =>
             {
             options.UseSqlServer(Configuration.GetConnectionString("Default"),
