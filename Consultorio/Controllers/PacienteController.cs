@@ -42,7 +42,7 @@ namespace Consultorio.Controllers
         {
             var paciente = await _repository.GetPacientesByIdAsync(id);
 
-            var pacienteRetorno = _mapper.Map<PacienteDetailsDto>(paciente);
+            var pacienteRetorno = _mapper.Map<PacienteDetalhesDto>(paciente);
 
             var pacienteTest = _mapper.Map<Paciente>(pacienteRetorno);
 

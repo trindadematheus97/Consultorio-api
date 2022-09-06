@@ -84,5 +84,47 @@ namespace Consultorio.Controllers
                : BadRequest("Erro ao deletar profissional.");
 
         }
+
+        [HttpPost("adicionar-profissional")]
+        public async Task<IActionResult> PostProfissionalEspecialidade(ProfissionalAdicionarEspecialidadeDto profissional)
+        {
+            int profissionalId = profissional.ProfissionalId;
+            int especialidadeId = profissional.EspecialidadeId;
+
+            if (profissionalId <= 0 || especialidadeId <= 0) return BadRequest("Dados inválidos.");
+
+            var profissionalEspecialidade = await _repository.GetProfissionalEspecialidade(profissionalId, especialidadeId);
+
+            if (profissionalEspecialidade != null) return Ok("Especialidade já cadastrada");
+
+
+            var especialidadeAdicionar = new ProfissionalEspecialidade
+            {
+                ProfissionalId = profissionalId,
+                EspecialidadeId = especialidadeId
+            };
+
+            _repository.Add(especialidadeAdicionar);
+
+            return await _repository.SaveChangesAsync()
+            ? Ok("Especialidade adicionada.")
+            : BadRequest("Erro ao adicionar especialidade");
+        }
+        [HttpDelete("{profissionalId}/deletar-especialidade/{especialidadeId}")]
+        public async Task<IActionResult> DeleteProfissionalEspecialidade(int profissionalId, int especialidadeId)
+        {
+            if (profissionalId <= 0 || especialidadeId <= 0) return BadRequest("Dados inválidos");
+
+            var profissionalEspecialidade = await _repository.GetProfissionalEspecialidade(profissionalId, especialidadeId);
+
+            if (profissionalEspecialidade == null)
+                return BadRequest("Especialidade não cadastrada");
+
+            _repository.Delete(profissionalEspecialidade);
+
+            return await _repository.SaveChangesAsync()
+                ? Ok("Especialiadade deletada do profissional")
+                : BadRequest("Erro ao deletar especialidade do profissional");
+        }
     }
 }
